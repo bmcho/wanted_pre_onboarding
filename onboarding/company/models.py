@@ -24,7 +24,7 @@ class Company(TimeStampedModel):
 
 
 class JopPosting(TimeStampedModel):
-    company = models.ForeignKey("Company", related_name="posting", on_delete=models.CASCADE)
+    company = models.ForeignKey("Company", related_name="recruit_posting", on_delete=models.CASCADE)
     position = models.CharField(max_length=10, choices=Position.choices, default=Position.NONE)
     compensation = models.IntegerField()
     content = models.TextField()

@@ -31,6 +31,7 @@ class CompanyListView(APIView):
     )
     def post(self, request):
         serializer = CompanySerializer(data=request.data)
+
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
