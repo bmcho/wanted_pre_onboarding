@@ -46,7 +46,6 @@ INSTALLED_APPS += ["rest_framework", "drf_yasg"]
 INSTALLED_APPS += [
     "company",
     "user",
-    "jopPosting",
 ]
 
 MIDDLEWARE = [

@@ -33,9 +33,8 @@ schema_view = get_schema_view(
 )
 
 app_urls = [
-    path("onboarding.user", include("user.urls")),
-    path("onboarding.company", include("company.urls")),
-    path("onboarding.jopPosting", include("jopPosting.urls")),
+    path("user", include("user.urls")),
+    path("company", include("company.urls")),
 ]
 
 urlpatterns = [
