@@ -44,7 +44,27 @@ class CompanyDetailSerializer(serializers.ModelSerializer):
         exclude = ("updated_at", "created_at")
 
 
+class JopPostingCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JopPosting
+        fields = ("company", "position", "compensation", "content", "skill")
+
+
+class JopPostingPutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JopPosting
+        fields = ("position", "compensation", "content", "skill")
+
+
 class JopPostingSerializer(serializers.ModelSerializer):
+    company = CompanySerializer(many=False)
+
+    class Meta:
+        model = JopPosting
+        exclude = ("content", "updated_at", "created_at")
+
+
+class JopPostingDetailSerializer(serializers.ModelSerializer):
     company = CompanySerializer(many=False)
 
     class Meta:
