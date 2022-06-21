@@ -1,7 +1,10 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from rest_framework.response import Response
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.response import Response
 from rest_framework.views import APIView, status
+
 from company.models import Company, JopPosting
 from company.serializers import (
     CompanyCreateSerializer,
@@ -14,6 +17,7 @@ from company.serializers import (
     JopPostingPutSerializer,
     JopPostingSerializer,
 )
+
 
 # Create your views here.
 class CompanyListView(APIView):
@@ -59,8 +63,42 @@ class CompanyDetailListView(APIView):
 
 
 class JopPostingListView(APIView):
+
+    company = openapi.Parameter(
+        "company",
+        openapi.IN_QUERY,
+        type=openapi.TYPE_STRING,
+    )
+
+    postion = openapi.Parameter(
+        "postion",
+        openapi.IN_QUERY,
+        type=openapi.TYPE_STRING,
+    )
+
+    skill = openapi.Parameter(
+        "skill",
+        openapi.IN_QUERY,
+        type=openapi.TYPE_STRING,
+    )
+
+    @swagger_auto_schema(
+        manual_parameters=[company, postion, skill],
+    )
     def get(self, reqeust):
-        posting = JopPosting.objects.all()
+        company = reqeust.GET.get("company", None)
+        postion = reqeust.GET.get("postion", None)
+        skill = reqeust.GET.get("skill", None)
+
+        q = Q()
+        if company:
+            q &= Q(company__companyname__contains=company)
+        if postion:
+            q &= Q(position=postion)
+        if skill:
+            q &= Q(skill__contains=skill)
+
+        posting = JopPosting.objects.filter(q).all()
         serializer = JopPostingSerializer(posting, many=True)
         return Response(serializer.data)
 
@@ -77,6 +115,7 @@ class JopPostingListView(APIView):
 
 class JopPostingDetailListView(APIView):
     def get(self, reqeust, posting_id):
+
         posting = JopPosting.objects.filter(id=posting_id).first()
         serializer = JopPostingDetailSerializer(posting, many=False)
         return Response(serializer.data)

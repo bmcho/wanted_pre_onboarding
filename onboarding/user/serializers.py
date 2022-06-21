@@ -1,7 +1,7 @@
+from company.serializers import JopPostingSerializer
 from rest_framework import serializers
 
-from company.serializers import JopPostingSerializer
-from user.models import UserInfo, ApplyPosting, Position
+from user.models import ApplyPosting, Position, UserInfo
 
 
 class ApplyPostingSerializer(serializers.ModelSerializer):
