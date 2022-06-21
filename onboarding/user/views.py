@@ -2,8 +2,10 @@ from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView, status
+
 from .models import UserInfo
 from .serializers import UserCreateSerializer, UserDetailSerializer, UserListSerializer, UserPutSerializer
+
 
 # Create your views here.
 class UserListView(APIView):
