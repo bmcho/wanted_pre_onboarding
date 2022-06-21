@@ -16,14 +16,15 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
-class User(TimeStampedModel):
-
+class UserInfo(TimeStampedModel):
     username = models.CharField(max_length=20, null=False)
-    email = models.EmailField(unique=True, error_messages={"unique": "이미 사용중인 이메일입니다."})
+    email = models.EmailField(unique=True, error_messages={"unique": "이미 사용중인 이메일입니다."}, null=False)
     position = models.CharField(max_length=10, choices=Position.choices, default=Position.NONE)
-    # job_posting = models.ManyToManyField("JopPosting")
+
+    class Meta:
+        ordering = ["id"]
 
 
 class ApplyPosting(TimeStampedModel):
-    user = models.ForeignKey("User", on_delete=models.CASCADE)
-    posting = models.ForeignKey("jopPosting.JopPosting", on_delete=models.CASCADE)
+    user = models.ForeignKey("UserInfo", on_delete=models.CASCADE, related_name="apply_posting")
+    posting = models.OneToOneField("company.JopPosting", on_delete=models.CASCADE, null=True)

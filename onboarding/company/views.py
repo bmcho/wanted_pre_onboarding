@@ -30,7 +30,7 @@ class CompanyListView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response({"detail": "success, create company"}, status.HTTP_200_OK)
+        return Response({"detail": "success, create company"}, status.HTTP_201_CREATED)
 
 
 class CompanyDetailListView(APIView):
@@ -49,7 +49,8 @@ class CompanyDetailListView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response({"detail": "success, create company"}, status.HTTP_200_OK)
+        serializer = CompanyDetailSerializer(company, many=False)
+        return Response(serializer.data, status.HTTP_202_ACCEPTED)
 
     def delete(self, request, company_id):
         company = get_object_or_404(Company, pk=company_id)
@@ -71,7 +72,7 @@ class JopPostingListView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response({"detail": "success, create jop-posting"}, status.HTTP_200_OK)
+        return Response({"detail": "success, create jop-posting"}, status.HTTP_201_CREATED)
 
 
 class JopPostingDetailListView(APIView):
@@ -85,8 +86,13 @@ class JopPostingDetailListView(APIView):
     )
     def put(self, reqeust, posting_id):
         posting = JopPosting.objects.filter(id=posting_id).first()
+        serializer = JopPostingDetailSerializer(posting, data=reqeust.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
         serializer = JopPostingDetailSerializer(posting, many=False)
-        return Response(serializer.data)
+        return Response(serializer.data, status.HTTP_202_ACCEPTED)
 
     def delete(self, request, posting_id):
         company = get_object_or_404(JopPosting, pk=posting_id)
